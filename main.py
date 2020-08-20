@@ -1,9 +1,11 @@
-import pyPDF2  # learn more: https://python.org/pypi/PyPDF2
+import PyPDF2  # learn more: https://python.org/pypi/PyPDF2
 from nltk import word_tokenize
 import nltk
 import sklearn
 import collections
-
+from nltk.corpus import stopwords
+#nltk.download('stopwords')
+nltk.download('punkt')
 print("Start PDF import...")
 # creating an object
 #file = open("D5100_EN.pdf", "rb")
@@ -67,7 +69,7 @@ def setup():
   stemmer = nltk.PorterStemmer()
   tokens = [stemmer.stem(t) for t in tokens]
 
-def process_text(text, stem=True):
+def process_text(stem=True):
 
   filename = "NAWCWD TP 8347.pdf"
   newfile = open(filename, "rb")
@@ -85,8 +87,8 @@ def process_text(text, stem=True):
  
 def cluster_texts(texts, clusters=3):
     """ Transform texts to Tf-Idf coordinates and cluster texts using K-Means """
-    vectorizer = sklearn.TfidfVectorizer(tokenizer=process_text,
-                                 stop_words=nltk.stopwords.words('english'),
+    vectorizer = sklearn.feature_extraction.text.TfidfVectorizer(tokenizer=process_text,
+                                 stop_words=stopwords.words('english'),
                                  max_df=0.5,
                                  min_df=0.1,
                                  lowercase=True)
@@ -104,7 +106,7 @@ def cluster_texts(texts, clusters=3):
  
  
 if __name__ == "__main__":
-    articles = []
+    articles = process_text()
     clusters = cluster_texts(articles, 7)
     print(dict(clusters))
   #print(len(tokens))
